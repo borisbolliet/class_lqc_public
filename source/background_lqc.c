@@ -1737,7 +1737,6 @@ int background_lqc_solve(
 /////////////
   pba->future_branch = 0;
   while(pba->future_branch <=1){
-  printf("branch = %d\n",pba->future_branch);
 
   pba->post_bounce = _FALSE_;
 
@@ -2147,11 +2146,9 @@ else{
 }
 
   
-    printf("contracting %d\n",pba->bt_contracting_phase_size);
     pba->bt_expanding_phase_size =
       pba->bt_size
       -pba->bt_contracting_phase_size-1;
-    printf("expanding %d\n",pba->bt_expanding_phase_size);
   
 
 
@@ -2525,7 +2522,7 @@ if (pba->has_perturbations_lqc == _FALSE_)
                pba->error_message);
    printf("Value of scalar field at the bounce = %e, corresponding value of potential = %e\n", pba->phi_ini,pow(pba->m_scf_lqc*pba->phi_ini,2.)/2.);
    while(fabs(pvecback2[pba->index_bg_epsilon_H] - 1.) > 1.e-3){
-      printf(" ti = %e, tf = %e, delta_epsion_H = %e\n",ti, tf, fabs(pvecback2[pba->index_bg_epsilon_H] - 1.));
+     //printf(" ti = %e, tf = %e, delta_epsion_H = %e\n",ti, tf, fabs(pvecback2[pba->index_bg_epsilon_H] - 1.));
       if(pvecback2[pba->index_bg_epsilon_H]>1.)tf = tm;
       else ti = tm;
       tm = (ti+tf)/2.;
@@ -2551,7 +2548,6 @@ if (pba->has_perturbations_lqc == _FALSE_)
                                  pvecback2),
                pba->error_message,
                pba->error_message);
-   printf("k_LQC at the bounce = %e,%e \n",sqrt(fabs(pvecback2[pba->index_bg_zT_primeprime_over_zT])) ,sqrt(fabs(-pba->rho_bounce*pow(pvecback2[pba->index_bg_y],2)*(1.-2.*(pow(pvecback2[pba->index_bg_x],2)+pow(pvecback2[pba->index_bg_y],2))))));
    printf("z''/z at the bounce = %e \n", pvecback2[pba->index_bg_zS_primeprime_over_zS]);
 
 /////////////////////////////////////////////////////////////////
@@ -2612,7 +2608,6 @@ if (pba->has_perturbations_lqc == _FALSE_)
 
 
 
-   printf("As = %e\n",pba->A_s);
 
     double pk_s_slow_roll=HUGE;
 
@@ -2654,12 +2649,10 @@ if (pba->has_perturbations_lqc == _FALSE_)
   printf("Pivot scale: k_pivot = %e M_Pl\n",pba->k_star);
   printf("Observable Inflation, N_star =%e\n",pba->N_star);
   printf("Cosmic time at the hubble exit of pivot scale = %e\n", pvecback2[pba->index_bg_cosmic_time]);
-  printf("Value of scalar field at the hubble exit of pivot scale = %e, corresponding value of potential = %e.\n", pvecback2[pba->index_bg_phi_scf],pvecback2[pba->index_bg_V]);
+  printf("Value of scalar field at the hubble exit of pivot scale = %e,\n corresponding value of potential = %e.\n", pvecback2[pba->index_bg_phi_scf],pvecback2[pba->index_bg_V]);
   
     double k_min_for_pk_s_slow_roll =1.e-3*pba->k_star;
-    //1.e2*pvecback2[pba->index_bg_a]*pvecback2[pba->index_bg_H];
     double k_max_for_pk_s_slow_roll = 1.e3*pba->k_star;
-  printf("k_min_for_pk_s_slow_roll=%e, k_star=%e\n",k_min_for_pk_s_slow_roll,pba->k_star);
 
   
   FILE * pkfile;     
@@ -2719,24 +2712,23 @@ epsilon_2 = pvecback2[pba->index_bg_epsilon_2];
 delta_H = epsilon_1 - epsilon_2/2.;
 ns = 1. - 4.*epsilon_1 + 2.*delta_H;
 As =  pk_s_slow_roll;
- printf("As = %e; ns =%e; epsilon_1 =%e; delta_H=%e; e2 = %e \n", As, ns, epsilon_1, delta_H, epsilon_2);
+ printf("As = %e; ns =%e; epsilon_1 =%e; epsilon_2 = %e \n", As, ns, epsilon_1, epsilon_2);
 
  double k_3 = 1.e-1*pba->k_star; //comment for EL
  double pk_s_3 = As*pow((k_3/(6.*pba->k_star)),ns-1.);//comment for EL
- printf("pk_3=%e \n",pk_s_3);
 
   sprintf(file_name,"%s_%s",pba->root,"pk_slow_roll_s.dat");
 
   class_open(pkfile,file_name,"w",pba->error_message);
 
     fprintf(pkfile,"#Slow roll primordial power spectrum P(k) %s\n","scalars");
-    fprintf(pkfile,"# for k=%g to %g,\n",
+    fprintf(pkfile,"#for k=%g to %g,\n",
              k_min_for_pk_s_slow_roll,
              k_max_for_pk_s_slow_roll);
     fprintf(pkfile,"#");
     class_fprintf_columntitle(pkfile,"k",_TRUE_,colnum);
     class_fprintf_columntitle(pkfile,"P",_TRUE_,colnum);
-    class_fprintf_columntitle(pkfile,"fNL",_TRUE_,colnum);
+    class_fprintf_columntitle(pkfile,"fNL (k2=k3=k)",_TRUE_,colnum);
    fprintf(pkfile," ");
     fprintf(pkfile,"\n");
 
@@ -2749,7 +2741,7 @@ while (k < k_max_for_pk_s_slow_roll) {
       class_fprintf_double(pkfile,one_k,_TRUE_);
 	double k_1 = k;
 	double k_2 = k;
-//	double k_3 = k;// uncomment for EL
+	double k_3 = k;
 
 
 	 double aH_sample=_HUGE_;
@@ -2794,8 +2786,7 @@ while (k < k_max_for_pk_s_slow_roll) {
 
       double pk_s_1=pk_s_slow_roll;
 	double pk_s_2=pk_s_slow_roll;
-//	double pk_s_3=pk_s_slow_roll;//uncomment for EL
-	printf("pk=%e\n",pk_s_slow_roll);
+	double pk_s_3=pk_s_slow_roll;//uncomment for EL
 	
 	H = pvecback2[pba->index_bg_H];
 	double H_1 = H;//pvecback2[pba->index_bg_H];	
@@ -2855,7 +2846,7 @@ while (k < k_max_for_pk_s_slow_roll) {
        +pow(k_3,3.)*pk_s_2*pk_s_1,-1.);
 
   class_fprintf_double(pkfile,fNL,_TRUE_);
-//  fprintf(pkfile,"\n");
+  fprintf(pkfile,"\n");
 
 
 
@@ -2878,8 +2869,8 @@ while (k < k_max_for_pk_s_slow_roll) {
        +pow(k_2,3.)*pk_s_1*pk_s_3
        +pow(k_3,3.)*pk_s_2*pk_s_1,-1.);
 	
-  class_fprintf_double(pkfile,fNL,_TRUE_);  
-  fprintf(pkfile,"\n");
+  //class_fprintf_double(pkfile,fNL,_TRUE_);  
+  //fprintf(pkfile,"\n");
    k *= pow(10.,1./(k_per_decade_for_pk_slow_roll));
 }
 
@@ -3117,13 +3108,13 @@ while (k < k_max_for_pk_s_slow_roll) {
   colnum = 1;
 
     fprintf(pkfile,"#Slow roll primordial power spectrum P(k) %s\n","tensors");
-    fprintf(pkfile,"# for k=%g to %g,\n",
+    fprintf(pkfile,"#for k=%g to %g,\n",
              k_min_for_pk_s_slow_roll,
              k_max_for_pk_s_slow_roll);
     fprintf(pkfile,"#");
     class_fprintf_columntitle(pkfile,"k",_TRUE_,colnum);
     class_fprintf_columntitle(pkfile,"P",_TRUE_,colnum);
-   fprintf(pkfile," ");
+   fprintf(pkfile," \n");
 
 
 

@@ -122,28 +122,28 @@ int output_init(
   /** Summary: */
 
   /** - check that we really want to output at least one file */
-
+  /*
   if ((ppt->has_cls == _FALSE_) && (ppt->has_pk_matter == _FALSE_) && (ppt->has_density_transfers == _FALSE_) && (ppt->has_velocity_transfers == _FALSE_) && (pop->write_background == _FALSE_) && (pop->write_thermodynamics == _FALSE_) && (pop->write_primordial == _FALSE_)) {
     if (pop->output_verbose > 0)
       printf("No output files requested. Output module skipped.\n");
     return _SUCCESS_;
   }
   else {
-    if (pop->output_verbose > 0)
+  if (pop->output_verbose > 0)*/
       printf("Writing output files in %s... \n",pop->root);
-  }
+      //  }
 
   /** - deal with all anisotropy power spectra \f$ C_l\f$'s */
-
+  /*
   if (ppt->has_cls == _TRUE_) {
 
     class_call(output_cl(pba,ppt,psp,ple,pop),
                pop->error_message,
                pop->error_message);
-  }
+	       }*/
 
   /** - deal with all Fourier matter power spectra P(k)'s */
-
+  /*
   if (ppt->has_pk_matter == _TRUE_) {
 
     class_call(output_pk(pba,ppt,psp,pop),
@@ -154,17 +154,17 @@ int output_init(
           class_call(output_pk_nl(pba,ppt,psp,pop),
                      pop->error_message,
                      pop->error_message);
-    }
-  }
+		     }
+  }*/
 
   /** - deal with density and matter power spectra */
-
+  /*
   if ((ppt->has_density_transfers == _TRUE_) || (ppt->has_velocity_transfers == _TRUE_)) {
 
     class_call(output_tk(pba,ppt,psp,pop),
                pop->error_message,
                pop->error_message);
-  }
+	       }*/
 
   /** - deal with background quantities */
 
@@ -177,7 +177,7 @@ int output_init(
 
     }
 
-  
+   /*
   if (pop->write_background == _TRUE_) {
 
     class_call(output_background(pba,pop),
@@ -185,26 +185,26 @@ int output_init(
                pop->error_message);
 
   }
-
+   */
   /** - deal with thermodynamics quantities */
-
+   /*
   if (pop->write_thermodynamics == _TRUE_) {
 
     class_call(output_thermodynamics(pba,pth,pop),
                pop->error_message,
                pop->error_message);
 
-  }
+	       }*/
 
   /** - deal with perturbation quantities */
-
+   /*
   if (pop->write_perturbations == _TRUE_) {
 
     class_call(output_perturbations(pba,ppt,pop),
                pop->error_message,
                pop->error_message);
 
-  }
+	       }*/
 
   if (pop->write_perturbations_lqc == _TRUE_) {
 
@@ -216,14 +216,14 @@ int output_init(
 
   
   /** - deal with primordial spectra */
-
+  /*
   if (pop->write_primordial == _TRUE_) {
 
     class_call(output_primordial(ppt,ppm,pop),
                pop->error_message,
                pop->error_message);
 
-  }
+	       }*/
 
   return _SUCCESS_;
 

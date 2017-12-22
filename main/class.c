@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
     return _FAILURE_;
     }
 
-  
+  /*
     
   if (background_init(&pr,&ba) == _FAILURE_) {
     printf("\n\nError running background_init \n=>%s\n",ba.error_message);
@@ -81,14 +81,15 @@ int main(int argc, char **argv) {
     printf("\n\nError in lensing_init \n=>%s\n",le.error_message);
     return _FAILURE_;
   }
-
+  
+  */
   if (output_init(&ba_lqc,&pt_lqc,&ba,&th,&pt,&pm,&tr,&sp,&nl,&le,&op) == _FAILURE_) {
     printf("\n\nError in output_init \n=>%s\n",op.error_message);
     return _FAILURE_;
-  }
+    }
 
   /****** all calculations done, now free the structures ******/
-
+  
   if (lensing_free(&le) == _FAILURE_) {
     printf("\n\nError in lensing_free \n=>%s\n",le.error_message);
     return _FAILURE_;

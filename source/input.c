@@ -2979,7 +2979,7 @@ int input_default_params(
 
   ppt_lqc->k_per_decade_for_pk_lqc = 20.;
 
-  ppt_lqc->tau_ini = 0.;
+  ppt_lqc->tau_ini = -1.e-5;
   ppt_lqc->tau_ini_for_k = 0.;
   ppt_lqc->tau_end = 0.;
 

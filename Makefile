@@ -33,7 +33,7 @@ OPTFLAG = -O4 -ffast-math #-march=native
 #OPTFLAG = -fast
 
 # your openmp flag (comment for compiling without openmp)
-OMPFLAG   = -fopenmp
+#OMPFLAG   = -fopenmp
 #OMPFLAG   = -mp -mp=nonuma -mp=allcores -g
 #OMPFLAG   = -openmp
 
@@ -83,6 +83,7 @@ endif
 TOOLS = growTable.o dei_rkck.o sparse.o evolver_rkck.o  evolver_ndf15.o arrays.o parser.o quadrature.o hyperspherical.o common.o
 
 SOURCE = input.o background.o thermodynamics.o perturbations.o primordial.o nonlinear.o transfer.o spectra.o lensing.o background_lqc.o perturbations_lqc.o
+#SOURCE = input.o background_lqc.o perturbations_lqc.o
 
 INPUT = input.o
 
@@ -148,7 +149,7 @@ PYTHON_FILES = python/classy.pyx python/setup.py python/cclassy.pxd python/test_
 
 
 
-all: class libclass.a classy
+all: class libclass.a #classy
 
 libclass.a: $(TOOLS) $(SOURCE) $(EXTERNAL)
 	$(AR)  $@ $(addprefix build/, $(TOOLS) $(SOURCE) $(EXTERNAL))
@@ -199,5 +200,5 @@ classy: libclass.a python/classy.pyx python/cclassy.pxd
 clean: .base
 	rm -rf $(WRKDIR);
 	rm -f libclass.a
-	rm -f $(MDIR)/python/classy.c
-	rm -rf $(MDIR)/python/build
+#rm -f $(MDIR)/python/classy.c
+#rm -rf $(MDIR)/python/build

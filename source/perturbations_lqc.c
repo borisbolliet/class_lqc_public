@@ -166,13 +166,6 @@ int perturb_lqc_init(
   FileName file_name;
   int colnum = 1;
 
-
-  //double one_fNL;
- //double one_x2;
- //double one_x3;
- //int index;
- //printf("x_size_end=%d",ppt->x_size[index_md]);
-
   sprintf(file_name,"%s_%s",pba->root,"bispectrum_s.dat");
 
   class_open(pkfile,file_name,"w",pba->error_message);
@@ -190,27 +183,6 @@ int perturb_lqc_init(
      //fprintf(pkfile," ");
        fclose(pkfile);
 
-
-     /*
-     
-    for (index=0; index< index_x_2_x_3; index++){
-
-      one_x2 =ppt->table_x2[index_md][index];
-      one_x3 =ppt->table_x3[index_md][index];
-  one_fNL = ppt->table_fNL[index_md][index];;
-
-  fprintf(pkfile," ");
-  class_fprintf_double(pkfile,one_x2,_TRUE_);
-  class_fprintf_double(pkfile,one_x3,_TRUE_);
-  class_fprintf_double(pkfile,one_fNL,_TRUE_);
-  fprintf(pkfile,"\n");
-
-    }
-
-
-       fclose(pkfile);
-
-   */
 
 
  
@@ -342,13 +314,6 @@ tau_min=pba->tau_start_inflation;
 
  
    }
- // else ppt->tau_end = pba->tau_end_inflation;
- //else ppt->tau_end = pba->tau_start_inflation;//???
-//ppt->tau_end = -1.e-5;//pba->tau_start_inflation;
-
- //free(pvecback2);
-printf("tau_end = %e\n",ppt->tau_end);
-
 
  
  
@@ -403,9 +368,6 @@ printf("tau_end = %e\n",ppt->tau_end);
 //  for (index_md = 0; index_md < ppt->md_size; index_md++) {
   for (index_md = 0; index_md <  1; index_md++) { //V.Sreenath 060617
 
-    if (ppt->perturbations_lqc_verbose > 1)
-      printf("Evolving mode %d/%d\n",index_md+1,ppt->md_size);
-    //ppt->x_size[index_md] = 0;
     abort = _FALSE_;
 
     sz = sizeof(struct perturb_lqc_workspace);
@@ -449,7 +411,6 @@ printf("tau_end = %e\n",ppt->tau_end);
       
       ppt->second_loop = 0;
 
-      // index_k_1=ppt->k_size[index_md]-1;
 
 
       
@@ -470,34 +431,13 @@ printf("tau_end = %e\n",ppt->tau_end);
                 for (index_k = ppt->k_size[index_md]-1; index_k >=0; index_k--) {
 
       
-          if ((ppt->perturbations_lqc_verbose > 2) && (abort == _FALSE_)) {
-            printf("evolving mode k=%e /Mpc  (%d/%d)",ppt->k[index_md][index_k],index_k+1,ppt->k_size[index_md]);
+          if ((ppt->perturbations_lqc_verbose > 1) && (abort == _FALSE_)) {
+	     printf("evolving mode k=%e /Mpc  (%d/%d)",ppt->k[index_md][index_k],index_k+1,ppt->k_size[index_md]);
             printf("\n");
           }
 
  
-                  /*for (index_k_2 = ppt->k_size[index_md]-1; index_k_2 >=0; index_k_2--) {
-
-          
-          if(ppt->k[index_md][index_k_2]>0.5*ppt->k[index_md][index_k_1]){
-          index_k_3_max = ppt->k_size[index_md]-1;
-          index_k_3_min = index_k_2;
-              }
-
-          else{
-          index_k_3_max = ppt->k_size[index_md]-1;
-          index_k_3_min = index_k_3_max-index_k_2;
-              }
-
-
-      
-        for (index_k_3 = index_k_3_max; index_k_3 >=index_k_3_min; index_k_3--) {
-
-          printf("k_2 k_3=%d %d\n",index_k_2,index_k_3);
-                  */
-        
           ppt->tau_ini_for_k = ppt->tau_ini;          
-          //printf("\n");
             index_k_1 = index_k;
             index_k_2 = index_k;
             index_k_3 = index_k;
@@ -618,9 +558,6 @@ int perturb_lqc_free(
           free(ppt->fields_at_tau_end_lqc[index_md][index_type]);
       free(ppt->fields_at_tau_end_lqc[index_md]);
       free(ppt->k[index_md]);
-      /*free(ppt->table_x2[index_md]);
-      free(ppt->table_x3[index_md]);
-      free(ppt->table_fNL[index_md]);*/
     }
 
     free(ppt->tau_sampling);
@@ -628,9 +565,6 @@ int perturb_lqc_free(
     free(ppt->tp_size);
 
     free(ppt->k);
-    /*free(ppt->table_x2);
-    free(ppt->table_x3);
-    free(ppt->table_fNL);*/
     free(ppt->ln_k);
     free(ppt->ln_pk);
     
@@ -638,9 +572,6 @@ int perturb_lqc_free(
     free(ppt->bispectrum_t_equi);
 
     free(ppt->k_size);
-    //free(ppt->x_size);
-
-    //free(ppt->sources);
 
     /** Stuff related to perturbations_lqc output: */
 
@@ -700,9 +631,6 @@ int perturb_lqc_indices_of_perturbs_lqc(
   /** - allocate array of number of types for each mode, ppt->tp_size[index_md] */
 
   class_alloc(ppt->tp_size,ppt->md_size*sizeof(int),ppt->error_message);
-
-  //class_alloc(ppt->sources,ppt->md_size * sizeof(double *),ppt->error_message);
-
   class_alloc(ppt->pk_lqc,ppt->md_size * sizeof(double *),ppt->error_message);
   class_alloc(ppt->fields_at_tau_end_lqc,ppt->md_size * sizeof(double *),ppt->error_message);
 
@@ -1127,7 +1055,6 @@ int perturb_lqc_indices_of_perturbs_lqc(
   
     }
 
-      printf("Defined indices for mode %d... number of indices = %d\n", index_md, ppt->tp_size[index_md]);
 
    class_alloc(ppt->fields_at_tau_end_lqc[index_md],
                ppt->tp_size[index_md]*sizeof(double *),
@@ -1164,10 +1091,8 @@ int perturb_lqc_timesampling_for_sources(
   int index_type;
   ppt->tau_size = 1;
   class_alloc(ppt->tau_sampling,ppt->tau_size*sizeof(double),ppt->error_message);
-//  ppt->tau_sampling[0] = 0.;
   ppt->tau_sampling[0] = ppt->tau_end;
 
- printf("tau_end = %e\n",ppt->tau_end); 
   for (index_md = 0; index_md < ppt->md_size; index_md++) {
       for (index_type = 0; index_type < ppt->tp_size[index_md]; index_type++) {
 
@@ -1256,7 +1181,6 @@ int perturb_lqc_get_k_list(
     /* values until k_max[ppt->index_md_scalars] */
 
     while (k < k_max) {
-    //while (index_k < ppt->k_per_decade_for_pk_lqc) {
 
       k *= pow(10.,1./(ppt->k_per_decade_for_pk_lqc));
                      
@@ -1287,22 +1211,6 @@ int perturb_lqc_get_k_list(
     *sizeof(double),ppt->error_message);
 
 
-    /* allocate array with, for the moment, the largest possible size */
-    /*
-    class_alloc(ppt->table_x2[ppt->index_md_tensors],
-                (int)((ppt->k_per_decade_for_pk_lqc*log(k_max/k_min)/log(10.))+3)
-                *(int)((ppt->k_per_decade_for_pk_lqc*log(k_max/k_min)/log(10.))+3)
-                *sizeof(double),ppt->error_message);
-    class_alloc(ppt->table_x3[ppt->index_md_tensors],
-                (int)((ppt->k_per_decade_for_pk_lqc*log(k_max/k_min)/log(10.))+3)
-                                *(int)((ppt->k_per_decade_for_pk_lqc*log(k_max/k_min)/log(10.))+3)
-*sizeof(double),ppt->error_message);
-   class_alloc(ppt->table_fNL[ppt->index_md_tensors],
-                (int)((ppt->k_per_decade_for_pk_lqc*log(k_max/k_min)/log(10.))+3)
-                               *(int)((ppt->k_per_decade_for_pk_lqc*log(k_max/k_min)/log(10.))+3)
-*sizeof(double),ppt->error_message);
-
-*/
 
     
     /* first value */
@@ -1312,7 +1220,6 @@ int perturb_lqc_get_k_list(
     ppt->k[ppt->index_md_tensors][index_k] = k;
     index_k++;
 
-    /* values until k_max[ppt->index_md_scalars] */
 
     while (k < k_max) {
 
@@ -1324,7 +1231,6 @@ int perturb_lqc_get_k_list(
     }
 
 
-    //ppt->x_size[ppt->index_md_tensors] = 0;
 
     ppt->k_size[ppt->index_md_tensors] = index_k;
 
@@ -1822,10 +1728,6 @@ int perturb_lqc_solve(
   /** - get wavenumber value */
   k_1 = ppt->k[index_md][index_k_1];
   k_2 = ppt->lambda_k_2*ppt->k[index_md][index_k_2];
-  //k_2 = 3.e0*pba->k_star;
-  //k_3 = 3.e0*pba->k_star;
-  // double theta = 5.*_PI_/5.;
-  //k_3 = sqrt(k_1*k_1+k_2*k_2+2.*k_1*k_2*cos(theta));
   k_3 = ppt->lambda_k_3*ppt->k[index_md][index_k_3];
 //  k_3 = 1.e-4*pba->k_star;//V. Sreenath
 
@@ -1893,9 +1795,6 @@ int perturb_lqc_solve(
 
   ppw->tau_ini_for_k = ppt->tau_ini_for_k;
   double tau_max=pba->tau_end_inflation;
-    //pba->tau_start_inflation
-    //            +pba->N_end
-    //            -pba->N_start_inflation;
   double tau_min=pba->tau_start_inflation;
   double tau_half;
   double aH_sample=_HUGE_;
@@ -1903,158 +1802,10 @@ int perturb_lqc_solve(
   int index_back;
     double * pvecback2;
      class_alloc(pvecback2,pba->bg_size_normal*sizeof(double),pba->error_message);
-            
-      aH_sample =
-      pba->a_bounce*sqrt(pba->rho_bounce/3.);
-
-
-      if (ppw->tau_ini_for_k<0.){
-      
-    if (ppt->k[index_md][index_k]>ppt->integration_depth_ini*aH_sample){
-           tau_max=ppt->tau_end;
-           tau_min = ppw->tau_ini_for_k;           
-         }
-   else{
-     // ppt->tau_ini_for_k=ppt->tau_ini;
-           tau_min = ppt->tau_ini;
-           tau_max=0.;
-       
-        }
-
-    tau_min = ppw->tau_ini_for_k;
-    //printf("Start tau_ini_for_k = %e \n",ppt->tau_ini_for_k);
-    // printf("Start tau_min = %e \n",tau_min);
-    //printf("Start tau_max = %e \n",tau_max);
  
-  class_call(background_lqc_at_tau(pba,
-                                 tau_min,
-                                 pba->normal_info,
-                                 pba->inter_normal,
-                                 &index_back,
-                                 pvecback2),
-               pba->error_message,
-               pba->error_message);
-  
-    aH_sample =
-      pvecback2[pba->index_bg_a]
-      *sqrt(pvecback2[pba->index_bg_rho_scf]/3.);
-
-
-    
-    if (ppt->k[index_md][index_k]>ppt->integration_depth_ini*aH_sample){
-
-      //printf("aH-k/K_ini = %e \n",aH_sample-ppt->k[index_md][index_k]
-      //        /ppt->integration_depth_ini);
-
-      
- while (fabs(aH_sample-ppt->k[index_md][index_k]
-              /ppt->integration_depth_ini)>
-        error_aH*ppt->k[index_md][index_k]
-              /ppt->integration_depth_ini){
-
-    tau_half = (tau_max+tau_min)/2;
-    
-  class_call(background_lqc_at_tau(pba,
-                                 tau_half,
-                                 pba->normal_info,
-                                 pba->inter_normal,
-                                 &index_back,
-                                 pvecback2),
-               pba->error_message,
-               pba->error_message);
-  
-   aH_sample =
-      pvecback2[pba->index_bg_a]
-      *sqrt(pvecback2[pba->index_bg_rho_scf]/3.);
-
-   if (aH_sample>ppt->k[index_md][index_k]/ppt->integration_depth_ini)
-    tau_max = tau_half;
-  else tau_min = tau_half;
-  ppw->tau_ini_for_k = tau_half;
-
-  //printf("in while= %e \n",1.);
-
- }//end while
-
- //printf("Start perturbations tau_ini = %e \n",ppt->tau_ini_for_k);
- //    printf("error_aH = %e \n",error_aH);
- //    printf("aH-k/K_ini = %e \n",aH_sample-ppt->k[index_md][index_k]
- //            /ppt->integration_depth_ini);
-
- 
-    }//end if k>K_ini*aH_ini
-    
-    else { //case k<K_ini*aH_ini, so one has to go back in time to find
-      // the time at which k=K_ini*aH_ini
-
-      //printf("Start perturbations tau_ini = %e \n",ppt->tau_ini_for_k);
-
-      tau_max = ppw->tau_ini_for_k;
-      //tau_min = pba->tau_table[0];
-      tau_min = pba->tau_end_deflation;
-         
-  class_call(background_lqc_at_tau(pba,
-                                 tau_min,
-                                 pba->normal_info,
-                                 pba->inter_normal,
-                                 &index_back,
-                                 pvecback2),
-               pba->error_message,
-               pba->error_message);
-  
-    aH_sample =
-      pvecback2[pba->index_bg_a]
-      *sqrt(pvecback2[pba->index_bg_rho_scf]/3.);
-
-
-    if (ppt->k[index_md][index_k]>ppt->integration_depth_ini*aH_sample){
-
- while (fabs(aH_sample-ppt->k[index_md][index_k]
-              /ppt->integration_depth_ini)>error_aH*ppt->k[index_md][index_k]
-              /ppt->integration_depth_ini){
-
-    tau_half = (tau_max+tau_min)/2;
-    
-  class_call(background_lqc_at_tau(pba,
-                                 tau_half,
-                                 pba->normal_info,
-                                 pba->inter_normal,
-                                 &index_back,
-                                 pvecback2),
-               pba->error_message,
-               pba->error_message);
-  
-   aH_sample =
-      pvecback2[pba->index_bg_a]
-      *sqrt(pvecback2[pba->index_bg_rho_scf]/3.);
-
-   if (aH_sample>ppt->k[index_md][index_k]/ppt->integration_depth_ini)
-    tau_max = tau_half;
-  else tau_min = tau_half;
-  ppw->tau_ini_for_k = tau_half;
-
- }//end while
-    }//end if k>K_ini*aH_ini
-
-    else {printf("Can not find a time at which  k>K_ini*aH_ini.\n");
-      ppw->tau_ini_for_k = pba->tau_end_deflation;
-     
-    }
-}
     ppw->tau_ini_for_k = pba->tau_end_deflation;
 
-         printf("k/k_star=%e, tau_ini = %e\n",
-             ppt->k[index_md][index_k]/pba->k_star,
-             ppw->tau_ini_for_k);
-   
-      }//end if tau_ini<0
-//    ppw->tau_ini_for_k = -5.e4;//1.e-5/sqrt(8.*_PI_);//V. Sreenath
 
-      printf("k/k_star=%e, tau_ini = %e, tau_end=%e\n",
-             ppt->k[index_md][index_k]/pba->k_star,
-               ppw->tau_ini_for_k,
-                              ppt->tau_end);
-  
 
       
   int index_interval = 0;
@@ -2062,82 +1813,6 @@ int perturb_lqc_solve(
   int interval_number=0;
 
 
-  //if (ppt->tau_ini_for_k<2.e0*pba->tau_end_remote_past)
-  //     ppt->tau_ini_for_k = 2.e0*pba->tau_end_remote_past;
-
-  /*
-if (index_md==ppt->index_md_scalars
-    && ppw->tau_ini_for_k<pba->tau_end_remote_past){
-
- tau_max = pba->tau_table[0];
- tau_min = pba->tau_end_remote_past;
- class_call(background_lqc_at_tau(pba,
-                                 tau_min,
-                                 pba->normal_info,
-                                 pba->inter_normal,
-                                 &index_back,
-                                 pvecback2),
-               pba->error_message,
-               pba->error_message);
-
-  double effective_potential_over_omega2 =
-    fabs(pvecback2[pba->index_bg_effective_potential]
-    /(k*k
-    +pvecback2[pba->index_bg_a]
-    *pvecback2[pba->index_bg_a]
-    *pba->m_scf_lqc
-      *pba->m_scf_lqc));
-
-  //printf("Mode k=%e, effective_potential_over_omega2 = %e \n",k,effective_potential_over_omega2);
-
-  double scalar_limit = 0.001;
-    if (effective_potential_over_omega2>scalar_limit){
-      
-      while (fabs(effective_potential_over_omega2-scalar_limit)/scalar_limit>0.001){
-
-    tau_half = (tau_max+tau_min)/2;
-    
-  class_call(background_lqc_at_tau(pba,
-                                 tau_half,
-                                 pba->normal_info,
-                                 pba->inter_normal,
-                                 &index_back,
-                                 pvecback2),
-               pba->error_message,
-               pba->error_message);
-  
-  effective_potential_over_omega2 = fabs(
-    pvecback2[pba->index_bg_effective_potential]
-    /(k*k
-    +pvecback2[pba->index_bg_a]
-    *pvecback2[pba->index_bg_a]
-    *pba->m_scf_lqc
-      *pba->m_scf_lqc));
-  //printf("whilMode k=%e, effective_potential_over_omega2 = %e \n",k,effective_potential_over_omega2);
-
-   if (effective_potential_over_omega2<scalar_limit)
-    tau_max = tau_half;
-  else tau_min = tau_half;
-  ppw->tau_ini_for_k = tau_half;
-
- }//end while
-
-      //printf("Mode k=%e, at t_ini, effective_potential_over_omega2 = %e \n",k,effective_potential_over_omega2);
-      
-    }//end if k>K_ini*aH_ini
-
-
-
-  if (ppw->tau_ini_for_k<2.e0*pba->tau_end_remote_past)
-       ppw->tau_ini_for_k = 10.e0*pba->tau_end_remote_past;
-
-    
- }
-
-  */
-
-  // ppw->tau_ini_for_k = ppt->tau_ini;
-  
 if (ppw->tau_ini_for_k<pba->tau_end_deflation){
   interval_number=4;
  }
@@ -2150,7 +1825,6 @@ if (ppw->tau_ini_for_k<pba->tau_end_deflation){
  else{
    interval_number=1;
        }
-//printf("Mode k=%e, interval_number = %d \n",k,interval_number);
 
   ppw->num_approx_intervals = interval_number;
  
@@ -2213,7 +1887,6 @@ else if (ppw->tau_ini_for_k< 0.){
   tau_lower = ppw->tau_ini_for_k;
   tau_upper = ppt->tau_end;
 
-  //printf("Mode k=%e, t_end = %e\n",k,tau_upper);
 
 
   
@@ -2242,29 +1915,10 @@ if(ppw->approx == (int)cosmic_time){
   
     tau_lower = interval_limit[index_interval];
     tau_upper = interval_limit[index_interval+1];
-/*  if(tau_lower < 0.){
-	 ppaw.pba->future_branch = 0;
-	pba->future_branch = 0;
-//	ppt->tau_sampling[0] = 0.;
- 	}
-  else {
-	ppaw.pba->future_branch = 1;
-	pba->future_branch = 1;
-//	ppt->tau_sampling[0] = tau_end;
-//	ppr->perturb_lqc_integration_stepsize = 1.e-2;
-	}*/
-//  printf("Mode k=%e, cosmic time starts at t = %e, ends at t = %e... future branch = %d\n",
-//         k,
-//          interval_limit[index_interval],
-//         interval_limit[index_interval+1], pba->future_branch);
-//printf("future branch = %d\n",pba->future_branch);
+
      }
 else{
 
-//    if(interval_limit[index_interval]<0.) pba->future_branch = 0;
-//    else 
-/*	ppaw.pba->future_branch = 1;
-	pba->future_branch = 1;*/
     double N_min,N_max;
     double tau_of_N_min,tau_of_N_max;
 
@@ -2281,10 +1935,6 @@ else{
                    pba->error_message,
                    ppt->error_message);
   
-//    printf("Mode k=%e, efolds starts at N = %e, ends at N = %e....future branch = %d\n",
-//           k,
-//          N_min,
-//          N_max, pba->future_branch);
 
   class_call(background_lqc_tau_of_N_pb(pba,
                                N_max,
@@ -2310,11 +1960,6 @@ else{
                    pba->error_message,
                    ppt->error_message);
   
-//    printf("Mode k=%e, efolds starts at N = %e, ends at N = %e....future branch = %d\n",
-//           k,
-//          N_min,
-//          N_max, pba->future_branch);
-
   class_call(background_lqc_tau_of_N_fb(pba,
                                N_max,
                                &tau_of_N_max),
@@ -2329,27 +1974,13 @@ else{
 
    }
    
-    
-/* printf("Mode k=%e, cosmic time starts at t = %e, ends at t = %e\n",
-           k,
-           tau_of_N_min,
-           tau_of_N_max);
-      
-   printf("Mode k=%e, cosmic time starts at t = %e, ends at t = %e\n",
-           k,
-           interval_limit[index_interval],
-           interval_limit[index_interval+1]);
-   printf("future branch = %d\n",pba->future_branch);
-*/ 
+
     tau_lower = N_min;
     tau_upper = N_max;
-//    if(tau_upper < 0.) pba->future_branch = 0;
-//    else pba->future_branch = 1;
+
 }
 
-//ppaw.pba = pba;
-// printf("branch = %d",ppaw.pba->future_branch); 
-    
+
     class_call(perturb_lqc_vector_init(ppr,
                                    pba,
                                    ppt,
@@ -2371,30 +2002,6 @@ else{
     else{
       generic_evolver = evolver_ndf15;
     }
-//       generic_evolver = evolver_ndf15;
-   //printf("H=%e\n",tau_lower);
-    //printf("H=%e\n",ppw->pvecback[pba->index_bg_H]);
-
-    /*
-    class_call(generic_evolver(perturb_lqc_derivs,
-                               tau_lower,
-                               tau_upper,
-                               ppw->pv->y,
-                               ppw->pv->used_in_sources,
-                               ppw->pv->pt_size,
-                               &ppaw,
-                               ppr->tol_perturb_lqc_integration,
-                               ppr->smallest_allowed_variation,
-                               perturb_lqc_timescale,
-                               ppr->perturb_lqc_integration_stepsize,
-                               ppt->tau_sampling,
-                               tau_actual_size,
-                               perturb_lqc_sources,
-                               perhaps_print_variables,
-                               ppt->error_message),
-               ppt->error_message,
-               ppt->error_message);
-    */
 
 
     generic_evolver(perturb_lqc_derivs,
@@ -2418,7 +2025,6 @@ else{
  }
 
 
-//printf("integration completed... \n");
     
     //FILL THE ARRAYS WITH VALUES OF THE FIELDS
     //AT THE END OF INTEGRATION
@@ -2439,7 +2045,7 @@ else{
      _set_fields_at_tau_end_lqc_(ppt->index_tp_pk_s_3) =
        ppw->pvecmetric[ppw->index_mt_pk_s_3];
 
-	printf("Ps(%e) = %e = %e\n", ppt->k[index_md][index_k], ppw->pvecmetric[ppw->index_mt_pk_s_3], ppt->fields_at_tau_end_lqc[index_md][ppt->index_tp_pk_s_1][index_k]);
+     //printf("Ps(%e) = %e = %e\n", ppt->k[index_md][index_k], ppw->pvecmetric[ppw->index_mt_pk_s_3], ppt->fields_at_tau_end_lqc[index_md][ppt->index_tp_pk_s_1][index_k]);
 
     if (ppt->has_bispectrum_lqc == _TRUE_) {
 
@@ -2637,7 +2243,6 @@ Y_000 = a_over_z_3
 
 
 double field_redef = -ppw->pvecmetric[ppw->index_mt_bispectrum_s_field_redef];
- printf("Mode k=%e, field_redef=%e.\n",k,field_redef);
 
        
 
@@ -3040,13 +2645,6 @@ Z_12d3d_001 = ppw->pvecmetric[ppw->index_mt_phi_12d3d_001];
             -Z_12d3d_101
             -Z_12d3d_011);
 
-        //field_redef
-        /*   double field_redef =
-         ppt->fields_at_tau_end_lqc
-               [index_md]
-               [ppt->index_tp_bispectrum_s_tau_end_field_redef]
-               [index_k];
-        */
 
         
   double      integral =
@@ -3058,7 +2656,6 @@ Z_12d3d_001 = ppw->pvecmetric[ppw->index_mt_phi_12d3d_001];
          +integral_1d23d //6
           +integral_12d3d //7
         +field_redef; //redef
- printf("Mode k=%e, integral = %e.\n",k,integral);
 
 
 double fNL =
@@ -3070,26 +2667,13 @@ double fNL =
        +pow(k_2,3.)*pk_s_1*pk_s_3
        +pow(k_3,3.)*pk_s_2*pk_s_1,-1.);
   
-//printf("IN SOLVE fNL=%e\n",fNL);
 
-        
-//printf("\n");
-             /*
-printf("IN SOLVE x_2=%e",
-       k_2/k_1);
-            printf("\n");
-
-printf("IN SOLVE x_3=%e",
-       k_3/k_1);
-            printf("\n");
-             */
   FILE * pkfile;
    FileName file_name;
   sprintf(file_name,"%s_%s",pba->root,"bispectrum_s.dat");
 
   class_open(pkfile,file_name,"a",pba->error_message);
   fprintf(pkfile," ");
-  //fprintf(pkfile,"\n");
 
   class_fprintf_int(pkfile,index_k_2,_TRUE_);
   class_fprintf_int(pkfile,index_k_3,_TRUE_);
@@ -3099,17 +2683,7 @@ printf("IN SOLVE x_3=%e",
        fprintf(pkfile,"\n");
 
        fclose(pkfile);
-
-
-       /*
-
-          ppt->table_x2[index_md][index_x_2_x_3] =
-            ppt->k[index_md][index_k_2]/ppt->k[index_md][index_k_1];
-           ppt->table_x3[index_md][index_x_2_x_3] =
-            ppt->k[index_md][index_k_3]/ppt->k[index_md][index_k_1];
-           ppt->table_fNL[index_md][index_x_2_x_3] = fNL;
-       */
-           
+ 
   index_x_2_x_3 += 1;
           
             
@@ -3539,9 +3113,6 @@ int perturb_lqc_vector_init(
   /** - case of setting initial conditions for a new wavenumber */
 
   if (pa_old == 0) {
-	printf("pa_old = %d\n",pa_old);
-    if (ppt->perturbations_lqc_verbose>2)
-      // fprintf(stdout,"Mode k=%e: initializing vector at tau=%e\n",k,tau);
     /** - --> (b) let ppw-->pv points towards the perturb_lqc_vector structure
         that we just created */
     ppw->pv = ppv;
@@ -3569,7 +3140,6 @@ int perturb_lqc_vector_init(
   
   else {
     //fprintf(stdout,"Mode k=%e: switching time variable at tau=%e\n",k,tau);
-	printf("pa_old = %d\n",pa_old);
 
   if (_scalars_lqc_) {
    
@@ -3613,47 +3183,6 @@ ppw->pv->y[ppw->pv->index_pt_phi_scf_im_3];
   ppv->y[ppv->index_pt_phi_prime_scf_im_3] =
         ppw->pvecmetric[ppw->index_mt_phi_scf_prime_im_3];
 
-//printf("");
-/*
-/////////////////////////////////////////////////////////////////
-//This part will have to be modified if an interval in cosmic_time 
-//follows an interval in efolds. (20-06-17)
-ppv->y[ppv->index_pt_phi_prime_scf_re] =
-  ppw->pv->y[ppw->pv->index_pt_phi_prime_scf_re];
-// *(ppw->pvecback[pba->index_bg_H]);
-ppv->y[ppv->index_pt_phi_prime_scf_im] =
-  ppw->pv->y[ppw->pv->index_pt_phi_prime_scf_im];
-// *(ppw->pvecback[pba->index_bg_H]);
-
-
-ppv->y[ppv->index_pt_phi_prime_scf_re_1] =
-  ppw->pv->y[ppw->pv->index_pt_phi_prime_scf_re_1];
-// *(ppw->pvecback[pba->index_bg_H]);
-ppv->y[ppv->index_pt_phi_prime_scf_im_1] =
-  ppw->pv->y[ppw->pv->index_pt_phi_prime_scf_im_1];
-// *(ppw->pvecback[pba->index_bg_H]);
-
-
-ppv->y[ppv->index_pt_phi_prime_scf_re_2] =
-  ppw->pv->y[ppw->pv->index_pt_phi_prime_scf_re_2];
-// *(ppw->pvecback[pba->index_bg_H]);
-ppv->y[ppv->index_pt_phi_prime_scf_im_2] =
-  ppw->pv->y[ppw->pv->index_pt_phi_prime_scf_im_2];
-// *(ppw->pvecback[pba->index_bg_H]);
-
-
-ppv->y[ppv->index_pt_phi_prime_scf_re_3] =
-  ppw->pv->y[ppw->pv->index_pt_phi_prime_scf_re_3];
-// *(ppw->pvecback[pba->index_bg_H]);
-ppv->y[ppv->index_pt_phi_prime_scf_im_3] =
-  ppw->pv->y[ppw->pv->index_pt_phi_prime_scf_im_3];
-// *(ppw->pvecback[pba->index_bg_H]);
-
-
-
-
-////////////////////////////////////////////////////////////////  
-*/
 if(ppw->approx == (int)efolds){
   
 ppv->y[ppv->index_pt_phi_prime_scf_re] =
@@ -3684,56 +3213,10 @@ ppv->y[ppv->index_pt_phi_prime_scf_im_3] =
   ppw->pv->y[ppw->pv->index_pt_phi_prime_scf_im_3]
 *(1./ppw->pvecback[pba->index_bg_H]);
 
-// printf("Mode k=%e: resetting IC in efolds\n",k);
 
  
  }
-/*   
- else {
 
-ppv->y[ppv->index_pt_phi_prime_scf_re] =
-  ppw->pv->y[ppw->pv->index_pt_phi_prime_scf_re]
-*(ppw->pvecback[pba->index_bg_H]);
-ppv->y[ppv->index_pt_phi_prime_scf_im] =
-  ppw->pv->y[ppw->pv->index_pt_phi_prime_scf_im]
-*(ppw->pvecback[pba->index_bg_H]);
-
-
-ppv->y[ppv->index_pt_phi_prime_scf_re_1] =
-  ppw->pv->y[ppw->pv->index_pt_phi_prime_scf_re_1]
-*(ppw->pvecback[pba->index_bg_H]);
-ppv->y[ppv->index_pt_phi_prime_scf_im_1] =
-  ppw->pv->y[ppw->pv->index_pt_phi_prime_scf_im_1]
-*(ppw->pvecback[pba->index_bg_H]);
-
-
-ppv->y[ppv->index_pt_phi_prime_scf_re_2] =
-  ppw->pv->y[ppw->pv->index_pt_phi_prime_scf_re_2]
-*(ppw->pvecback[pba->index_bg_H]);
-ppv->y[ppv->index_pt_phi_prime_scf_im_2] =
-  ppw->pv->y[ppw->pv->index_pt_phi_prime_scf_im_2]
-*(ppw->pvecback[pba->index_bg_H]);
-
-
-ppv->y[ppv->index_pt_phi_prime_scf_re_3] =
-  ppw->pv->y[ppw->pv->index_pt_phi_prime_scf_re_3]
-*(ppw->pvecback[pba->index_bg_H]);
-ppv->y[ppv->index_pt_phi_prime_scf_im_3] =
-  ppw->pv->y[ppw->pv->index_pt_phi_prime_scf_im_3]
-*(ppw->pvecback[pba->index_bg_H]);
-
-
- 
-// printf("Mode k=%e: resetting IC in cosmic time\n",k);
-
- }
-  
- */
-/* printf( "Q_re( %e ) = %e\n", ppw->pvecback[pba->index_bg_cosmic_time], ppv->y[ppv->index_pt_phi_scf_re]);
- printf( "Q_im( %e ) = %e\n", ppw->pvecback[pba->index_bg_cosmic_time], ppv->y[ppv->index_pt_phi_scf_im]);
- printf( "Q'_re( %e ) = %e\n", ppw->pvecback[pba->index_bg_cosmic_time], ppv->y[ppv->index_pt_phi_prime_scf_re]);
- printf( "Q'_im( %e ) = %e\n", ppw->pvecback[pba->index_bg_cosmic_time], ppv->y[ppv->index_pt_phi_prime_scf_im]);
-*/
 //1
   ppv->y[ppv->index_pt_bispectrum_s_prefactor_123_000] =
         ppw->pv->y[ppw->pv->index_pt_bispectrum_s_prefactor_123_000];
@@ -3892,9 +3375,6 @@ ppv->y[ppv->index_pt_gwdot_im] =
   ppw->pv->y[ppw->pv->index_pt_gwdot_im]
 *(1./ppw->pvecback[pba->index_bg_H]);
 
-
-//printf("Mode k=%e: resetting IC in efolds\n",k,tau);
-//    printf("H =%e: resetting IC in efolds\n",ppw->pvecback[pba->index_bg_H]);
  }
  
  else {
@@ -3936,7 +3416,6 @@ ppv->y[ppv->index_pt_gwdot_im] =
 
   
      }
-  //printf("Mode k=%e, approx = %d\n",k,ppw->approx);
 
 
   
@@ -3993,7 +3472,6 @@ int perturb_lqc_initial_conditions(struct precision * ppr,
   /** --> Declare local variables */
 
  if(ppw->approx == (int)efolds) {
-   //  printf("Mode k=%e, initial conditions in the efolds interval.\n",k);
   double tau_of_N;
 if(ppw->num_approx_intervals>3 && ppw->approx_interval < 1){
 class_call(background_lqc_tau_of_N_pb(pba,
@@ -4030,21 +3508,11 @@ class_call(background_lqc_tau_of_N_fb(pba,
                ppt->error_message);
 
 }
-/*
-    class_call(background_lqc_at_N(pba,
-                                 tau,
-                                 pba->normal_info,
-                                 pba->inter_normal,
-                                 &(ppw->last_index_back),
-                                 ppw->pvecback),
-               pba->error_message,
-               ppt->error_message);
-*/
+
  }
 
     else {
 
-      //printf("Mode k=%e, initial conditions in the cosmic time interval.\n",k);
     if(ppw->num_approx_intervals >2 && ppw->approx_interval <1){
  
     class_call(background_lqc_at_tau_pb(pba,
@@ -4077,10 +3545,7 @@ class_call(background_lqc_tau_of_N_fb(pba,
 
     a_prime_over_a = ppw->pvecback[pba->index_bg_H]*a;
    
-    //printf("N=%e\n", ppw->pvecback[pba->index_bg_N]);
-    // printf("a=%e\n", ppw->pvecback[pba->index_bg_a]);
-    // printf("H=%e\n", ppw->pvecback[pba->index_bg_H]);
-
+   
   if (_scalars_lqc_) {
 
         ppw->pv->y[ppw->pv->index_pt_phi_scf_re] =
@@ -4313,8 +3778,6 @@ if(ppw->approx == (int)efolds){
   ppw->pv->y[ppw->pv->index_pt_gwdot_im] *=
     (1./ppw->pvecback[pba->index_bg_H]);
 
-  // printf("Mode k=%e: initializing vector with gwdot_re =%e\n",
-  //      k,ppw->pv->y[ppw->pv->index_pt_gwdot_re]);
 
          }
               
@@ -4379,27 +3842,7 @@ int perturb_lqc_timescale(
   
        if (ppw->approx == (int)efolds){
  double tau_of_N;
-/*class_call(background_lqc_tau_of_N(pba,
-                               tau,
-                               &tau_of_N),
-                   pba->error_message,
-                   ppt->error_message);
 
-
-    class_call(background_lqc_at_tau(pba,
-                                 tau_of_N,
-                                 pba->normal_info,
-                                 pba->inter_normal,
-                                 &(ppw->last_index_back),
-                                 ppw->pvecback),
-               pba->error_message,
-               ppt->error_message);
-*/
-/*    
-         class_call(background_lqc_at_N(pba,tau, pba->normal_info, ppw->inter_mode, &(ppw->last_index_back), pvecback),
-             pba->error_message,
-             error_message);*/
-//Modified on 17/07/17
 
 if(ppw->num_approx_intervals > 3 && ppw->approx_interval < 1){
 class_call(background_lqc_tau_of_N_pb(pba,
@@ -4441,10 +3884,7 @@ class_call(background_lqc_tau_of_N_fb(pba,
          }
        else{
 
-/*         class_call(background_lqc_at_tau(pba,tau, pba->normal_info, ppw->inter_mode, &(ppw->last_index_back), pvecback),
-             pba->error_message,
-             error_message); */
-//Modified on 17/07/17
+
 
         if(ppw->num_approx_intervals > 2 && ppw->approx_interval < 1){
 
@@ -4458,11 +3898,7 @@ class_call(background_lqc_tau_of_N_fb(pba,
              error_message);  }
 	}	
 
-   a = pvecback[pba->index_bg_a];
-   //printf("a=%e\n", pvecback[pba->index_bg_a]);
-
-//printf("pia = %e, pia = %e \n",pvecback[pba->index_bg_pia],ppw->pvecback[pba->index_bg_pia]);
-   
+   a = pvecback[pba->index_bg_a];   
    tau_h = 1./sqrt(pvecback[pba->index_bg_rho_scf]/3.);
    tau_k = a/pppaw->k;
 
@@ -4522,21 +3958,7 @@ int perturb_lqc_einstein(
   double cut_off_bispectrum_3;
  if (_scalars_lqc_)  {
    
-/*double sqrt_z_prime_prime_over_z =
-  a*pow(ppw->pvecback[pba->index_bg_rho_scf]/3.,1./2.)
-  *sqrt(fabs(ppw->pvecback[pba->index_bg_f_S]));*/
-double sqrt_z_prime_prime_over_z = 
-//sqrt(fabs(ppw->pvecback[pba->index_bg_zT_primeprime_over_zT]));
-//a*pow(ppw->pvecback[pba->index_bg_rho_scf]/3.,1./2.);
-	sqrt(fabs(ppw->pvecback[pba->index_bg_zS_primeprime_over_zS]));
-// if(ppw->approx == (int)efolds){
-// cut_off_bispectrum = exp(-K/ppt->delta_cut_off_bispectrum);
-   cut_off_bispectrum_1 = exp(-k_1/ppt->delta_cut_off_bispectrum/sqrt_z_prime_prime_over_z/3.);
-   cut_off_bispectrum_2 = exp(-k_2/ppt->delta_cut_off_bispectrum/sqrt_z_prime_prime_over_z/3.);
-   cut_off_bispectrum_3 = exp(-k_3/ppt->delta_cut_off_bispectrum/sqrt_z_prime_prime_over_z/3.);
-   cut_off_bispectrum =  cut_off_bispectrum_1*cut_off_bispectrum_2*cut_off_bispectrum_3;
-//    }
-//  else cut_off_bispectrum = 1.;
+
    cut_off_bispectrum = exp(-(K_1 + K_2 + K_3)/3./ppt->delta_cut_off_bispectrum);
 
  }
@@ -4554,7 +3976,6 @@ double sqrt_z_prime_prime_over_z =
     
   
   double prefactor;
-//  printf("U = %e\n", ppw->pvecback[pba->index_bg_a]);
   if (_scalars_lqc_) {
     prefactor =  prefactor_bispectrum_s;
 
@@ -4872,22 +4293,6 @@ if(ppw->pvecback[pba->index_bg_H]<0.){
       *y[ppw->pv->index_pt_phi_scf_re_3];
 
     
-
-    
-    /*
-    if(a*a*pba->m_scf_lqc*pba->m_scf_lqc>10.*k*k){
-
-  
-    ppw->pvecmetric[ppw->index_mt_phi_scf_prime_prime_im] =
-      +(3.-ppw->pvecback[pba->index_bg_epsilon_H])
-      *y[ppw->pv->index_pt_phi_prime_scf_im];
-
-       
-    ppw->pvecmetric[ppw->index_mt_phi_scf_prime_prime_re] =
-      +(3.-ppw->pvecback[pba->index_bg_epsilon_H])
-      *y[ppw->pv->index_pt_phi_prime_scf_re];
-
-      }*/
       
     }
     }
@@ -5042,33 +4447,6 @@ else
      double rho = (pow(ppw->pvecback[pba->index_bg_x],2.)
               +pow(ppw->pvecback[pba->index_bg_y],2.))*pba->rho_bounce;
 
-/*     double z = //ppw->pvecback[pba->index_bg_z_S];
-      sqrt(6.)*a
-      *ppw->pvecback[pba->index_bg_y]
-       /sqrt((pow(ppw->pvecback[pba->index_bg_x],2.)
-              +pow(ppw->pvecback[pba->index_bg_y],2.)));
-
-             double z_dot =
-             (-2.*z
-             -ppw->pvecback[pba->index_bg_mu]
-              *ppw->pvecback[pba->index_bg_x]
-              *sqrt(6.)*a
-       /sqrt((pow(ppw->pvecback[pba->index_bg_x],2.)
-              +pow(ppw->pvecback[pba->index_bg_y],2.)))
-             +ppw->pvecback[pba->index_bg_epsilon_H]*z)
-             *ppw->pvecback[pba->index_bg_H];
-
-     double z_tilde = z/a;
-     double z_tilde_dot = -(3. - ppw->pvecback[pba->index_bg_epsilon_H])*phi_dot
-                - V_phi*ppw->pvecback[pba->index_bg_H]/(rho/3.);*/
-
-/*     double z_tilde_dot = 
-             z_dot/a
-             -ppw->pvecback[pba->index_bg_H]
-             *z/a;*/
-
-//     double phi_dot = ppw->pvecback[pba->index_bg_phi_prime_scf];
-
      double t123 = (k_1*k_1+k_2*k_2+k_3*k_3)/(a*a);
 
      double g23 =
@@ -5083,17 +4461,7 @@ else
        k_1_dot_k_2*k_1_dot_k_2
        /k_2/k_2/k_1/k_1-1.;
     
-       
-/*   double prefactor_123 = 
-     -(-t123
-      +9.*phi_dot*phi_dot
-     -(3./2.)*z_tilde*z_tilde*phi_dot*phi_dot
-     -6.*pba->m_scf_lqc*pba->m_scf_lqc
-     -(1./2.)*(g12+g13+g23)*z_tilde_dot*z_tilde_dot*z_tilde//V. Sreenath
-     +3.*phi_dot*z_tilde_dot
-     )
-   *(1./4.)*a*a*a*z_tilde
-   *cut_off_bispectrum;*/
+  
 
    double prefactor_123 = -(-( (243.*pow(Pphi,7.)*pow(a,-8.)*pow(PIa,-5.)/2. 
 	- 81.*pow(Pphi,5.)*pow(a*a*PIa,-3.)/2. + 27.*pow(Pphi,3.)*pow(a,-4.)/PIa/8. 
@@ -5102,19 +4470,7 @@ else
 	+ 3.*a*a*Pphi/PIa/2.*(-t123) + 6.*9.*a*pow(Pphi/PIa,2.)*V_phi/2. //010717
 	- 6.*3.*a*a*Pphi*V_phiphi/PIa/2. + 6.*a*a*a*V_phiphiphi/6.)
 	 *cut_off_bispectrum);
-	
- 
-/*   double prefactor_123_000 = 
-        -(-t123
-      +9.*phi_dot*phi_dot
-     -(3./2.)*z_tilde*z_tilde*phi_dot*phi_dot
-     -6.*pba->m_scf_lqc*pba->m_scf_lqc
-     -(1./2.)*(g12+g13+g23)*z_tilde_dot*z_tilde_dot*z_tilde//V. Sreenath
-     +3.*phi_dot*z_tilde_dot
-     )
-   *(1./4.)*a*a*a*z_tilde
-        *cut_off_bispectrum;
-   //prefactor_123 = a*a*cut_off_bispectrum;*/
+        
    double prefactor_123_000 = -(-( (243.*pow(Pphi,7.)*pow(a,-8.)*pow(PIa,-5.)/2. 
         - 81.*pow(Pphi,5.)*pow(a*a*PIa,-3.)/2. + 27.*pow(Pphi,3.)*pow(a,-4.)/PIa/8.
         + 81.*pow(Pphi/PIa,4.)*V_phi/a - 27.*a*pow(Pphi/PIa,2.)*V_phi/2 + 27.*pow(a*a/PIa,3.)*Pphi*V_phi*V_phi/2.)
@@ -5123,13 +4479,6 @@ else
         - 6.*3.*a*a*Pphi*V_phiphi/PIa/2. + 6.*a*a*a*V_phiphiphi/6.)
          *cut_off_bispectrum);
 
-
-/* double prefactor_1d23 =
-   -(-8.*z_tilde_dot*h23_s
-    +2.*z_tilde*z_tilde*phi_dot
-    +z_tilde*z_tilde*z_tilde_dot*(g12+g13)
-    )*(1./8.)*a*a*a
-   *cut_off_bispectrum;*/
    double prefactor_1d23 = -( -a*a*a*(
 	( 81.*pow(Pphi,5.)*pow(a,-7.)*pow(PIa,-4.) - 27.*pow(Pphi,3.)*pow(a,-5.)*pow(PIa,-2.)/2.
 	+ 27.*pow(Pphi,2.)*V_phi*pow(PIa,-3.))*(-g12 -g13) - 2.*9.*pow(Pphi,3.)*pow(a,-5.)*pow(PIa,-2.)/2.
@@ -5137,13 +4486,6 @@ else
 	*cut_off_bispectrum);
 	
 
-
-/* double prefactor_12d3 =
-   -(-8.*z_tilde_dot*h13_s
-    +2.*z_tilde*z_tilde*phi_dot
-    +z_tilde*z_tilde*z_tilde_dot*(g23+g12)
-    )*(1./8.)*a*a*a
-   *cut_off_bispectrum;*/
    double prefactor_12d3 = -( -a*a*a*(
 	( 81.*pow(Pphi,5.)*pow(a,-7.)*pow(PIa,-4.) - 27.*pow(Pphi,3.)*pow(a,-5.)*pow(PIa,-2.)/2.
 	+ 27.*pow(Pphi,2.)*V_phi*pow(PIa,-3.))*(-g12 -g23) - 2.*9.*pow(Pphi,3.)*pow(a,-5.)*pow(PIa,-2.)/2.
@@ -5152,46 +4494,22 @@ else
 
 
 
-/* double prefactor_123d =
-   -(-8.*z_tilde_dot*h12_s
-    +2.*z_tilde*z_tilde*phi_dot
-    +z_tilde*z_tilde*z_tilde_dot*(g23+g13)
-    )*(1./8.)*a*a*a
-   *cut_off_bispectrum;*/
    double prefactor_123d = -( -a*a*a*(
 	( 81.*pow(Pphi,5.)*pow(a,-7.)*pow(PIa,-4.) - 27.*pow(Pphi,3.)*pow(a,-5.)*pow(PIa,-2.)/2.
 	+ 27.*pow(Pphi,2.)*V_phi*pow(PIa,-3.))*(-g13 -g23) - 2.*9.*pow(Pphi,3.)*pow(a,-5.)*pow(PIa,-2.)/2.
 	+ ( -3.*Pphi*pow(a,-3.)/2. + 9.*pow(Pphi,3.)*pow(a,-5.)*pow(PIa,-2) + 3.*a*a*V_phi/PIa )*h12_s)
 	*cut_off_bispectrum);
 
-
-
-
-  
-/* double prefactor_12d3d =
-   -(4.*z_tilde*(h31+h21-1.)
-    -g23*z_tilde*z_tilde*z_tilde
-    )*(1./8.)*a*a*a*cut_off_bispectrum;*/
    double prefactor_12d3d = -( -pow(a,6.)*(
 	27.*pow(Pphi,3.)*pow(a*a*PIa,-3)*(-g23) - 3.*Pphi*pow(a,-4.)/PIa
 	+ 3.*Pphi*pow(a,-4.)/PIa*(h12 + h13))
 	*cut_off_bispectrum);
 
-
-/* double prefactor_1d23d =
-   -(4.*z_tilde*(h32+h12-1.)
-    -g13*z_tilde*z_tilde*z_tilde
-    )*(1./8.)*a*a*a*cut_off_bispectrum;*/
    double prefactor_1d23d = -( -pow(a,6.)*(
 	27.*pow(Pphi,3.)*pow(a*a*PIa,-3)*(-g13) - 3.*Pphi*pow(a,-4.)/PIa
 	+ 3.*Pphi*pow(a,-4.)/PIa*(h12 + h23))
 	*cut_off_bispectrum);
 
-
-/* double prefactor_1d2d3 =
-   -(4.*z_tilde*(h23+h13-1.)
-    -g12*z_tilde*z_tilde*z_tilde
-    )*(1./8.)*a*a*a*cut_off_bispectrum;*/
    double prefactor_1d2d3 = -( -pow(a,6.)*(
 	27.*pow(Pphi,3.)*pow(a*a*PIa,-3)*(-g12) - 3.*Pphi*pow(a,-4.)/PIa
 	+ 3.*Pphi*pow(a,-4.)/PIa*(h13 + h23))
@@ -5231,11 +4549,6 @@ if(ppw->approx == (int)efolds){
  double Q_s_3_abs =pow(pow(Q_s_3_im,2.)+pow(Q_s_3_re,2.),0.5);
 
 
-/* double V_phi =
-   pba->m_scf_lqc
-   *pba->m_scf_lqc
-   *ppw->pvecback[pba->index_bg_phi_scf];*/
- 
  double epsilon_2 =
    -6.
    -2.*V_phi
@@ -5863,13 +5176,7 @@ if(ppw->approx == (int)efolds){
    +pow(ppw->pvecmetric[ppw->index_mt_R_s_re],2.))
    *(1./(2.*_PI_*_PI_));
 
- /*
- ppw->pvecmetric[ppw->index_mt_pk_s] =
-   pow(k,3.)*(
-   pow(ppw->pvecmetric[ppw->index_mt_phi_scf_im],2.)
-   +pow(ppw->pvecmetric[ppw->index_mt_phi_scf_re],2.))
-   *(1./(2.*_PI_*_PI_));
-   */
+
 
  ppw->pvecmetric[ppw->index_mt_pk_s_1] =
    pow(k_1,3.)*(
@@ -6590,16 +5897,6 @@ class_call(background_lqc_tau_of_N_fb(pba,
                pba->error_message,
                ppt->error_message);
  
-/*
-  class_call(background_lqc_at_N(pba,
-                               tau,
-                               pba->normal_info,
-                               pba->inter_closeby,
-                               &(ppw->last_index_back),
-                               pvecback),
-             pba->error_message,
-             error_message);
-*/
 class_call(background_lqc_N_of_tau_fb(pba,
                                tau,
                                &tau_of_N),
@@ -6667,9 +5964,6 @@ class_call(background_lqc_N_of_tau_fb(pba,
   a2 = a*a;
   a_prime_over_a = pvecback[pba->index_bg_H] * a;
 
-// printf("derivs at t = %e...future_branch = %d\n",tau, pba->future_branch);
-//if(k>10.)printf("%e %e \n",pvecback[pba->index_bg_cosmic_time],pvecback[pba->index_bg_zS_primeprime_over_zS]);
-  
   if (_scalars_lqc_) {
  
       dy[pv->index_pt_phi_scf_re] =
@@ -6747,14 +6041,7 @@ class_call(background_lqc_N_of_tau_fb(pba,
        ppw->pvecmetric[ppw->index_mt_bispectrum_s_123_011];
        dy[pv->index_pt_bispectrum_s_123_111] =
        ppw->pvecmetric[ppw->index_mt_bispectrum_s_123_111];
-       /* dy[pv->index_pt_bispectrum_s_123_000] =0.;
-       dy[pv->index_pt_bispectrum_s_123_100] =0.;
-       dy[pv->index_pt_bispectrum_s_123_010] =0.;
-       dy[pv->index_pt_bispectrum_s_123_001] =0.;
-       dy[pv->index_pt_bispectrum_s_123_110] =0.;
-       dy[pv->index_pt_bispectrum_s_123_101] =0.;
-       dy[pv->index_pt_bispectrum_s_123_011] =0.;
-       dy[pv->index_pt_bispectrum_s_123_111] =0.;*/         
+       
        //2
      dy[pv->index_pt_bispectrum_s_123d_000] =
        ppw->pvecmetric[ppw->index_mt_bispectrum_s_123d_000];
@@ -7494,14 +6781,10 @@ if (index_md==ppt->index_md_tensors)  {
 
 //Interaction term:
       if (index_md==ppt->index_md_tensors)
-        integral = //pow(ppt->k[index_md][index_k],9./2.)*Y_000;
+        integral =
       2.*(Y_000-3.*Y_110)*(Z_111-3.*Z_100)
          -2.*(Y_111-3.*Y_100)*(Z_000-3.*Z_110);
-          //2.*(Y_000-3.*Y_110)*exp(-3.*ppt->k[index_md][index_k]/sqrt(2.39))/2.
-          //-2.*(Y_111-3.*Y_100)
-          // *exp(-3.*ppt->k[index_md][index_k]/sqrt(2.39))
-          // /pow(ppt->k[index_md][index_k],3.);
-      
+
       else{
 
         //1
@@ -7520,30 +6803,6 @@ if (index_md==ppt->index_md_tensors)  {
            -Z_123_011);
 
 
-        //printf("\nintegral123=%e, efolds.\n",Z_123_001);
-        //printf("integral123=%e, efolds.\n",Z_123_010);
-        //printf("\nintegral123=%e, efolds.\n",Z_123_100);
-        //printf("integral123=%e, efolds.\n",Z_123_000);
-        // printf("integral123=%e, efolds.\n",Z_123_110);
-        //printf("integral123=%e, efolds.\n",Z_123_101);
-        //printf("integral123=%e, efolds.\n",Z_123_011);
-        //printf("integral123=%e, efolds.\n",Z_123_111);
-        
-        // printf("\nintegral123=%e, efolds.\n",1.
-        //       -(Y_000-3.*Y_011/*-Y_101-Y_110*/)*(
-        //     Z_123_111
-             //-Z_123_001
-             //-Z_123_010
-        //      -3.*Z_123_100)
-        //       /((Y_111-3.*Y_100/*-Y_010-Y_001*/)*(
-        //     Z_123_000
-             //-Z_123_110
-             //-Z_123_101
-        //    -3.*Z_123_011)));
-        /*printf("integral123=%e, efolds.\n",((Y_111-Y_100-Y_010-Y_001)*(Z_123_000
-            -Z_123_110
-            -Z_123_101
-            -Z_123_011)));*/
 
         //2
         double integral_1d23 =
@@ -7557,17 +6816,7 @@ if (index_md==ppt->index_md_tensors)  {
             -Z_1d23_110
             -Z_1d23_101
             -Z_1d23_011);
-        /*printf("integral1d23=%e, efolds.\n\n\n",1.-(Y_000-Y_011-Y_101-Y_110)*(Z_1d23_111
-            -Z_1d23_001
-            -Z_1d23_010
-                                                                               -Z_1d23_100)/((Y_111-Y_100-Y_010-Y_001)*(Z_1d23_000
-            -Z_1d23_110
-            -Z_1d23_101
-            -Z_1d23_011)));*/
-                /*     printf("integral1d23=%e, efolds.\n\n\n\n",(Y_111-Y_100-Y_010-Y_001)*(Z_1d23_000
-            -Z_1d23_110
-            -Z_1d23_101
-            -Z_1d23_011));*/
+
 
         //3
         double integral_12d3 =
@@ -7634,7 +6883,6 @@ if (index_md==ppt->index_md_tensors)  {
           -Z_12d3d_011);
 
 
-        //printf("IN TABLE: Y_110=%e.\n",Z_12d3d_110);
 
         
         //field_redef
@@ -7656,19 +6904,6 @@ if (index_md==ppt->index_md_tensors)  {
           +integral_1d23d //6
           +integral_12d3d //7
           +field_redef; //redef
-
-        /*
-        printf("integral_123=%e, efolds.\n",integral_123);
-        printf("integral_1d23=%e, efolds.\n",integral_1d23);
-        printf("integral_12d3=%e, efolds.\n",integral_12d3);
-        printf("Z_123d_100=%e, efolds.\n",Z_123d_001);
-        printf("integral_1d2d3=%e, efolds.\n",integral_1d2d3);
-        printf("integral_12d3d=%e, efolds.\n",integral_12d3d);
-        printf("integral_1d23d=%e, efolds.\n",integral_1d23d);
-        printf("field_redef=%e, efolds.\n",field_redef);
-
-        printf("integral=%e, efolds.\n",integral);
-        */
 
       
  }
@@ -7702,16 +6937,7 @@ double pk_t_3 = ppt->fields_at_tau_end_lqc[index_md]
  double k_1 = ppt->k[index_md][index_k];
  double k_2 = ppt->lambda_k_2*k_1;
  double k_3 = ppt->lambda_k_3*k_1;
-//double k_3 = 1.e-4*pba->k_star;//V. Sreenath
 
- 
-//k_2 = 3.e0*pba->k_star;
-//k_3 = 3.e0*pba->k_star;
-  // double theta = 5.*_PI_/5.;
-  //k_3 = sqrt(k_1*k_1+k_2*k_2+2.*k_1*k_2*cos(theta));
-  //k_3 = ppt->lambda_k_3*ppt->k[index_md][index_k];
-
-  
  
  
  double integral_s= -10./3.
@@ -7722,7 +6948,6 @@ double pk_t_3 = ppt->fields_at_tau_end_lqc[index_md]
        +pow(k_2,3.)*pk_s_1*pk_s_3
        +pow(k_3,3.)*pk_s_2*pk_s_1,-1.);//V. Sreenath's comment fNL
 
-//double integral_s= pow(k_1*k_3,3.)*integral; //V. Sreenath Bispectrum
 
 double integral_t =
   8.
@@ -7736,35 +6961,14 @@ double integral_t =
        +pow(k_3,3.)*pk_t_2*pk_t_1,-1.)
   /2.;
 
-printf(" k = %e, integral = %e, fnl = %e \n", k_1, integral, integral_s);
- 
- //integral = (Z_123_000-3.*Z_123_011);
- double epsilon_2 = pba->epsilon_2;
+printf(" k = %e, fnl = %e \n", k_1, integral_s);
 
- /*integral =  epsilon_2/(4.*pk_s_2)
-   *pow(2.*_PI_,-3.)
-   *pow(k_1,3.)
-   *integral;
-   */
       
      if (index_md==ppt->index_md_scalars) 
        ppt->bispectrum_s_equi[index_k] = integral_s;
      if (index_md==ppt->index_md_tensors)
        ppt->bispectrum_t_equi[index_k] = integral_t;
-         integral_t;
-         (Z_111-3*Z_100);
-         integral_t/(
-  8.
-  *4.*4.
-  *pow(2.*_PI_*_PI_,-2.)
-  *pow(k_1*k_2*k_3,3.)
-  *(pow(k_1,2.)+pow(k_2,2.)+pow(k_3,2.))
-   *(Y_000-3.*Y_110)
-  *exp(-3.*k_1/sqrt(2.39))/2.
-  *pow(pow(k_1,3.)*pk_t_2*pk_t_3
-       +pow(k_2,3.)*pk_t_1*pk_t_3
-       +pow(k_3,3.)*pk_t_2*pk_t_1,-1.)
-  /2.);
+
 
         
 
@@ -7909,7 +7113,6 @@ if (index_md==ppt->index_md_scalars)
 else if (index_md==ppt->index_md_tensors)
           pk_tot[index_k] = ppt->bispectrum_t_equi[index_k];
 
-//printf("Mode b=%e, efolds.\n",pk_tot[index_k]);
       class_call(output_one_line_of_pk_lqc(out,
                                        exp(ppt->ln_k[index_k]),
                                        pk_tot[index_k]),
